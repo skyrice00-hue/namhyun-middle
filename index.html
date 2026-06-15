@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>남현교회 중등부</title>
+<style>
+/* ═══════════════════════════════════════════
+   RESET & TOKENS
+═══════════════════════════════════════════ */
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue:#185FA5;--blue-l:#E6F1FB;--blue-d:#0C447C;--blue-xl:#042C53;
+  --green:#1D9E75;--green-l:#E1F5EE;--green-d:#085041;
+  --amber:#BA7517;--amber-l:#FAEEDA;--amber-d:#633806;
+  --red:#A32D2D;--red-l:#FCEBEB;--red-b:#F7C1C1;
+  --pink:#993556;--pink-l:#FBEAF0;
+  --bg:#F4F3F0;--card:#fff;--surface:#ECEAE6;
+  --t1:#1a1a1a;--t2:#555;--t3:#888;
+  --br:#e4e4e2;--br2:#ccc;
+  --r:10px;--r-sm:6px;--r-lg:14px;
+  --shadow:0 1px 3px rgba(0,0,0,.07);
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans-serif;
+  background:var(--bg);color:var(--t1);font-size:15px;line-height:1.65}
+
+/* ═══════════════════════════════════════════
+   NAV
+═══════════════════════════════════════════ */
+.nav{background:#fff;border-bottom:1px solid var(--br);height:56px;display:flex;
+  align-items:center;justify-content:space-between;padding:0 1.25rem;
+  position:sticky;top:0;z-index:300;box-shadow:var(--shadow)}
+.nav-brand{display:flex;align-items:center;gap:9px;cursor:pointer;text-decoration:none}
+.nav-logo{width:34px;height:34px;background:var(--blue);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:11px;flex-shrink:0}
+.nav-name{font-size:14px;font-weight:700;color:var(--t1)}
+.nav-links{display:flex;gap:2px}
+.nav-link{padding:6px 11px;border-radius:var(--r-sm);text-decoration:none;
+  font-size:13px;font-weight:500;color:var(--t2);transition:all .15s;border:none;background:none;cursor:pointer}
+.nav-link:hover{background:var(--surface);color:var(--t1)}
+.nav-link.on{background:var(--blue-l);color:var(--blue-d);font-weight:600}
+.nav-right{display:flex;align-items:center;gap:8px}
+.btn-admin{background:var(--blue);color:#fff;border:none;padding:6px 13px;
+  border-radius:var(--r-sm);font-size:12px;font-weight:600;cursor:pointer;text-decoration:none}
+.hamburger{display:none;background:none;border:none;cursor:pointer;padding:4px;color:var(--t1)}
+.mobile-nav{display:none;position:fixed;top:56px;left:0;right:0;background:#fff;
+  border-bottom:1px solid var(--br);z-index:299;padding:.5rem .75rem}
+.mobile-nav a{display:block;padding:10px 8px;font-size:14px;text-decoration:none;color:var(--t1);border-radius:var(--r-sm)}
+.mobile-nav a:hover{background:var(--surface)}
+
+/* ═══════════════════════════════════════════
+   PAGE SYSTEM
+═══════════════════════════════════════════ */
+.page{display:none}.page.on{display:block}
+
+/* ═══════════════════════════════════════════
+   HERO (홈)
+═══════════════════════════════════════════ */
+.hero{background:var(--blue);color:#fff;padding:2.5rem 1.25rem 2rem;text-align:center}
+.hero-eyebrow{font-size:11px;opacity:.6;letter-spacing:2px;margin-bottom:8px;text-transform:uppercase}
+.hero-title{font-size:28px;font-weight:700;letter-spacing:-.5px;margin-bottom:8px}
+.hero-verse{font-size:13px;opacity:.78;line-height:1.75;margin-bottom:4px}
+.hero-ref{font-size:11px;opacity:.5;margin-bottom:1.5rem}
+.hero-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.hero-btn{padding:9px 18px;border-radius:8px;font-size:13px;font-weight:600;
+  cursor:pointer;border:none;text-decoration:none;display:inline-flex;align-items:center;gap:5px;transition:opacity .15s}
+.hero-btn:hover{opacity:.88}
+.hero-btn.w{background:#fff;color:var(--blue)}
+.hero-btn.g{background:rgba(255,255,255,.16);color:#fff;border:1px solid rgba(255,255,255,.3)}
+
+/* ═══════════════════════════════════════════
+   LAYOUT
+═══════════════════════════════════════════ */
+.wrap{max-width:880px;margin:0 auto;padding:1.5rem 1rem}
+
+/* ═══════════════════════════════════════════
+   STAT CARDS
+═══════════════════════════════════════════ */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1.5rem}
+.stat{background:#fff;border:1px solid var(--br);border-radius:var(--r);
+  padding:.9rem;text-align:center;box-shadow:var(--shadow)}
+.stat-l{font-size:11px;color:var(--t3);margin-bottom:4px}
+.stat-v{font-size:21px;font-weight:700;color:var(--t1)}
+
+/* ═══════════════════════════════════════════
+   SECTION HEADING
+═══════════════════════════════════════════ */
+.sh{font-size:14px;font-weight:700;color:var(--t1);margin-bottom:.75rem;
+  display:flex;align-items:center;gap:6px}
+.sh::before{content:'';width:3px;height:14px;background:var(--blue);border-radius:2px}
+
+/* ═══════════════════════════════════════════
+   CARD
+═══════════════════════════════════════════ */
+.card{background:#fff;border:1px solid var(--br);border-radius:var(--r);
+  padding:1rem 1.2rem;margin-bottom:1rem;box-shadow:var(--shadow)}
+.divv{height:1.5rem}
+
+/* ═══════════════════════════════════════════
+   NOTICE LIST
+═══════════════════════════════════════════ */
+.ni{display:flex;align-items:flex-start;gap:10px;padding:.65rem 0;
+  border-bottom:1px solid var(--br)}
+.ni:last-child{border-bottom:none}
+.badge{font-size:11px;padding:2px 8px;border-radius:4px;font-weight:600;white-space:nowrap;flex-shrink:0}
+.b-s{background:var(--blue-l);color:var(--blue-d)}
+.b-p{background:var(--green-l);color:var(--green-d)}
+.b-b{background:var(--amber-l);color:var(--amber-d)}
+.b-n{background:var(--pink-l);color:var(--pink)}
+.ni-title{font-size:14px;font-weight:500;color:var(--t1);margin-bottom:2px}
+.ni-body{font-size:12px;color:var(--t2);margin-top:3px;white-space:pre-wrap;line-height:1.5}
+.ni-date{font-size:11px;color:var(--t3);margin-top:2px}
+
+/* ═══════════════════════════════════════════
+   CALENDAR
+═══════════════════════════════════════════ */
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+.cal-nav button{background:#fff;border:1px solid var(--br);border-radius:var(--r-sm);
+  padding:5px 14px;font-size:14px;cursor:pointer;color:var(--t1);transition:border-color .15s}
+.cal-nav button:hover{border-color:var(--blue);color:var(--blue)}
+.cal-month{font-size:16px;font-weight:700;color:var(--t1)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.cal-dh{text-align:center;font-size:11px;font-weight:600;padding:5px 0;color:var(--t3)}
+.cal-dh.sun{color:var(--red)}.cal-dh.sat{color:var(--blue)}
+.cal-cell{min-height:58px;border-radius:7px;border:1px solid var(--br);
+  padding:4px 5px;background:#fff;transition:border-color .1s;position:relative}
+.cal-cell.empty{background:transparent;border-color:transparent}
+.cal-cell.sunday{background:var(--red-l);border-color:var(--red-b)}
+.cal-cell.saturday .day-n{color:var(--blue)}
+.cal-cell.sunday .day-n{color:var(--red);font-weight:700}
+.cal-cell.today{border:2px solid var(--blue)}
+.day-n{font-size:12px;font-weight:500;line-height:1;margin-bottom:2px}
+.cal-ev{font-size:10px;padding:1px 4px;border-radius:3px;margin-bottom:1px;
+  line-height:1.4;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;
+  background:var(--blue-l);color:var(--blue-d)}
+.cal-ev.ev-red{background:var(--red-l);color:var(--red)}
+
+/* GCAL tab */
+.gcal-frame{width:100%;height:500px;border:none;border-radius:var(--r)}
+.tab-bar{display:flex;gap:3px;border-bottom:1px solid var(--br);margin-bottom:1rem}
+.tab-btn{padding:8px 14px;border:none;background:none;font-size:13px;font-weight:500;
+  color:var(--t3);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tab-btn.on{color:var(--blue);border-bottom-color:var(--blue)}
+
+/* ═══════════════════════════════════════════
+   INTRO / STAFF
+═══════════════════════════════════════════ */
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:1rem}
+.info-box{background:var(--surface);border-radius:var(--r-sm);padding:.75rem}
+.info-box .lbl{font-size:11px;color:var(--t3);margin-bottom:3px}
+.info-box .val{font-size:13px;font-weight:600;color:var(--t1)}
+.pastor-card{background:var(--blue-l);border:1px solid #B5D4F4;border-radius:var(--r);
+  padding:1rem 1.2rem;display:flex;align-items:center;gap:14px;margin-bottom:1rem}
+.pastor-av{width:50px;height:50px;border-radius:50%;background:var(--blue);
+  display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;font-weight:700;flex-shrink:0}
+.pastor-role{font-size:11px;color:var(--blue);margin-bottom:2px}
+.pastor-name{font-size:17px;font-weight:700;color:var(--blue-xl);margin-bottom:2px}
+.pastor-tel{font-size:12px;color:var(--blue-d)}
+.staff-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-bottom:1rem}
+.staff-card{background:#fff;border:1px solid var(--br);border-radius:var(--r-sm);padding:.7rem 1rem}
+.staff-role{font-size:11px;color:var(--t3);margin-bottom:2px}
+.staff-name{font-size:13px;font-weight:600;color:var(--t1)}
+.teacher-blk{margin-bottom:.9rem}
+.teacher-lbl{font-size:12px;font-weight:600;color:var(--t2);margin-bottom:6px;
+  padding-bottom:3px;border-bottom:1px solid var(--br)}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip{font-size:12px;padding:3px 10px;border-radius:5px;background:var(--surface);
+  color:var(--t1);border:1px solid var(--br)}
+
+/* ═══════════════════════════════════════════
+   YOUTUBE
+═══════════════════════════════════════════ */
+.yt-box{width:100%;aspect-ratio:16/9;border-radius:var(--r);overflow:hidden;
+  border:1px solid var(--br);margin-bottom:.75rem}
+.yt-box iframe{width:100%;height:100%;border:none}
+.ext{color:var(--blue);font-size:13px;text-decoration:none;display:inline-flex;align-items:center;gap:4px}
+.ext:hover{text-decoration:underline}
+
+/* ═══════════════════════════════════════════
+   BULLETIN / WORSHIP ORDER
+═══════════════════════════════════════════ */
+.worship-table{width:100%;border-collapse:collapse;font-size:13px}
+.worship-table tr{border-bottom:1px solid var(--br)}
+.worship-table tr:last-child{border-bottom:none}
+.worship-table td{padding:7px 8px;color:var(--t1)}
+.worship-table td:first-child{color:var(--t2);width:35%;font-weight:500}
+.worship-table td.highlight{font-weight:700;color:var(--blue-d)}
+
+/* ═══════════════════════════════════════════
+   EMPTY / LOADING
+═══════════════════════════════════════════ */
+.empty{text-align:center;padding:2rem;color:var(--t3);font-size:13px}
+.loading{text-align:center;padding:2rem}
+.spin{display:inline-block;width:22px;height:22px;border:2px solid var(--br);
+  border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ═══════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════ */
+footer{text-align:center;padding:2rem 1rem;font-size:12px;color:var(--t3);
+  border-top:1px solid var(--br);margin-top:1rem}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════ */
+@media(max-width:640px){
+  .nav-links{display:none}
+  .hamburger{display:block}
+  .stats{grid-template-columns:repeat(3,1fr)}
+  .hero-title{font-size:22px}
+  .staff-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<!-- ─── NAV ─────────────────────────────── -->
+<nav class="nav">
+  <a class="nav-brand" href="#" onclick="go('home');return false">
+    <div class="nav-logo">중등부</div>
+    <span class="nav-name">남현교회 중등부</span>
+  </a>
+  <div class="nav-links">
+    <button class="nav-link on" id="nl-home"     onclick="go('home',this)">홈</button>
+    <button class="nav-link"   id="nl-intro"    onclick="go('intro',this)">소개</button>
+    <button class="nav-link"   id="nl-schedule" onclick="go('schedule',this)">연간일정</button>
+    <button class="nav-link"   id="nl-media"    onclick="go('media',this)">설교/찬양</button>
+    <button class="nav-link"   id="nl-bulletin" onclick="go('bulletin',this)">주보/공지</button>
+  </div>
+  <div class="nav-right">
+    <a href="admin.html" class="btn-admin">관리자</a>
+    <button class="hamburger" onclick="toggleMobile()" aria-label="메뉴">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+  </div>
+</nav>
+<div class="mobile-nav" id="mobile-nav">
+  <a href="#" onclick="go('home');closeMobile();return false">홈</a>
+  <a href="#" onclick="go('intro');closeMobile();return false">소개</a>
+  <a href="#" onclick="go('schedule');closeMobile();return false">연간일정</a>
+  <a href="#" onclick="go('media');closeMobile();return false">설교/찬양</a>
+  <a href="#" onclick="go('bulletin');closeMobile();return false">주보/공지</a>
+  <a href="admin.html">관리자</a>
+</div>
+
+<!-- ═══════════════════════════════════════
+   PAGE: HOME
+═══════════════════════════════════════ -->
+<div class="page on" id="page-home">
+  <div class="hero">
+    <div class="hero-eyebrow">2026 남현교회 중등부 표어</div>
+    <div class="hero-title">'하나님과 함께 걷기'</div>
+    <div class="hero-verse">사람이 마음으로 자기의 길을 계획할지라도<br>그의 걸음을 인도하시는 이는 여호와시니라</div>
+    <div class="hero-ref">잠언 16장 9절</div>
+    <div class="hero-btns">
+      <button class="hero-btn w" onclick="go('media',document.getElementById('nl-media'))">▶ 최근 설교</button>
+      <button class="hero-btn g" onclick="go('schedule',document.getElementById('nl-schedule'))">📅 이번 달 일정</button>
+      <button class="hero-btn g" onclick="go('intro',document.getElementById('nl-intro'))">👥 중등부 소개</button>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="stats">
+      <div class="stat"><div class="stat-l">다음 주일</div><div class="stat-v" id="s-nextSun">—</div></div>
+      <div class="stat"><div class="stat-l">이번 달 행사</div><div class="stat-v" id="s-evCnt">—</div></div>
+      <div class="stat"><div class="stat-l">최근 공지</div><div class="stat-v" id="s-noCnt">—</div></div>
+    </div>
+
+    <div class="sh">최근 공지 및 주보</div>
+    <div class="card" id="home-notices"><div class="loading"><div class="spin"></div></div></div>
+
+    <div class="divv"></div>
+    <div class="sh">유튜브 채널</div>
+    <div class="card">
+      <a class="ext" href="https://youtube.com/playlist?list=PLnH9HulIMcJeJDKi0oPVAk0lEQ-kGxFiJ" target="_blank" style="margin-bottom:10px;display:inline-flex">↗ 남현교회 중등부 유튜브 플레이리스트</a>
+      <div class="yt-box">
+        <iframe src="https://www.youtube.com/embed/videoseries?list=PLnH9HulIMcJeJDKi0oPVAk0lEQ-kGxFiJ" allowfullscreen title="남현교회 중등부 유튜브"></iframe>
+      </div>
+    </div>
+    <div style="text-align:right;margin-top:-.5rem">
+      <a class="ext" href="http://www.inamhyun.org/" target="_blank">↗ 남현교회 메인 홈페이지</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+   PAGE: INTRO
+═══════════════════════════════════════ -->
+<div class="page" id="page-intro">
+  <div class="wrap">
+    <div class="sh">예배 안내</div>
+    <div class="card">
+      <div class="info-grid">
+        <div class="info-box"><div class="lbl">예배 시간</div><div class="val">오전 10:50 ~ 12:10</div></div>
+        <div class="info-box"><div class="lbl">장소</div><div class="val">비전홀 (1층)</div></div>
+        <div class="info-box"><div class="lbl">연락처</div><div class="val">010-2088-4620</div></div>
+        <div class="info-box"><div class="lbl">주소</div><div class="val">서울 구로구 경인로 346</div></div>
+      </div>
+    </div>
+
+    <div class="sh">담당 목사</div>
+    <div class="pastor-card">
+      <div class="pastor-av">유</div>
+      <div>
+        <div class="pastor-role">담당 목사 · 교육장</div>
+        <div class="pastor-name">유동균 목사</div>
+        <div class="pastor-tel">☎ 010-2088-4620</div>
+      </div>
+    </div>
+
+    <div class="sh">중등부 섬김이</div>
+    <div class="staff-grid">
+      <div class="staff-card"><div class="staff-role">교장</div><div class="staff-name">윤영배 담임목사</div></div>
+      <div class="staff-card"><div class="staff-role">원장</div><div class="staff-name">강춘봉 장로</div></div>
+      <div class="staff-card"><div class="staff-role">부장</div><div class="staff-name">최광림 선생님</div></div>
+      <div class="staff-card"><div class="staff-role">부감</div><div class="staff-name">조영탁 선생님</div></div>
+      <div class="staff-card"><div class="staff-role">총무</div><div class="staff-name">홍연희 선생님</div></div>
+      <div class="staff-card"><div class="staff-role">서기</div><div class="staff-name">류동춘 선생님</div></div>
+      <div class="staff-card"><div class="staff-role">회계</div><div class="staff-name">임재균 선생님</div></div>
+      <div class="staff-card"><div class="staff-role">새친구</div><div class="staff-name">노하늘 선생님</div></div>
+      <div class="staff-card"><div class="staff-role">찬양</div><div class="staff-name">양하언·이지원·김민승</div></div>
+      <div class="staff-card"><div class="staff-role">영상</div><div class="staff-name">강슬침 선생님</div></div>
+      <div class="staff-card"><div class="staff-role">보조</div><div class="staff-name">박주원·안지은·한용렬</div></div>
+    </div>
+
+    <div class="sh">학년별 담임교사</div>
+    <div class="teacher-blk">
+      <div class="teacher-lbl">1학년</div>
+      <div class="chips">
+        <span class="chip">김정인</span><span class="chip">문애경</span><span class="chip">김찬영</span><span class="chip">최원식</span><span class="chip">송냥선</span>
+      </div>
+    </div>
+    <div class="teacher-blk">
+      <div class="teacher-lbl">2학년</div>
+      <div class="chips">
+        <span class="chip">한화영</span><span class="chip">이기준</span><span class="chip">이소연</span><span class="chip">김지민</span><span class="chip">최하경</span><span class="chip">임재균</span>
+      </div>
+    </div>
+    <div class="teacher-blk">
+      <div class="teacher-lbl">3학년</div>
+      <div class="chips">
+        <span class="chip">류한빈</span><span class="chip">조영탁</span><span class="chip">강민영</span><span class="chip">홍연희</span><span class="chip">류동춘</span>
+      </div>
+    </div>
+
+    <div class="sh" style="margin-top:.5rem">학생 섬김이</div>
+    <div class="staff-grid">
+      <div class="staff-card"><div class="staff-role">회장</div><div class="staff-name">신하울</div></div>
+      <div class="staff-card"><div class="staff-role">부회장</div><div class="staff-name">이현서</div></div>
+      <div class="staff-card"><div class="staff-role">찬양국장</div><div class="staff-name">이혜율</div></div>
+      <div class="staff-card"><div class="staff-role">안내국장</div><div class="staff-name">박예나</div></div>
+    </div>
+    <div class="teacher-blk">
+      <div class="teacher-lbl">1학년 리더</div>
+      <div class="chips"><span class="chip">김용결</span><span class="chip">박주아</span><span class="chip">복솔지</span><span class="chip">배민서</span><span class="chip">이지우</span><span class="chip">장하희</span></div>
+    </div>
+    <div class="teacher-blk">
+      <div class="teacher-lbl">2학년 리더</div>
+      <div class="chips"><span class="chip">김정하울</span><span class="chip">태한별</span></div>
+    </div>
+    <div class="teacher-blk">
+      <div class="teacher-lbl">3학년 리더</div>
+      <div class="chips"><span class="chip">김용찬</span><span class="chip">김주은</span><span class="chip">장연주</span><span class="chip">정세윤</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+   PAGE: SCHEDULE
+═══════════════════════════════════════ -->
+<div class="page" id="page-schedule">
+  <div class="wrap">
+    <div class="sh">연간 일정</div>
+    <div class="tab-bar">
+      <button class="tab-btn on" onclick="switchTab('mine',this)">중등부 일정</button>
+      <button class="tab-btn"   onclick="switchTab('gcal',this)">구글 캘린더</button>
+    </div>
+
+    <div id="tab-mine">
+      <div class="cal-nav">
+        <button onclick="movMonth(-1)">‹ 이전</button>
+        <span class="cal-month" id="cal-label"></span>
+        <button onclick="movMonth(1)">다음 ›</button>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+      <div class="divv"></div>
+      <div class="sh">이번 달 행사 목록</div>
+      <div class="card" id="month-list"></div>
+    </div>
+
+    <div id="tab-gcal" style="display:none">
+      <p style="font-size:13px;color:var(--t2);margin-bottom:.75rem">
+        구글 캘린더에서 전체 일정을 확인하세요.
+        <a class="ext" href="https://calendar.google.com" target="_blank" style="margin-left:6px">↗ 구글 캘린더 열기</a>
+      </p>
+      <iframe id="gcal-frame" class="gcal-frame" src="about:blank" title="구글 캘린더"></iframe>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+   PAGE: MEDIA
+═══════════════════════════════════════ -->
+<div class="page" id="page-media">
+  <div class="wrap">
+    <div class="sh">주일 설교 & 찬양</div>
+    <div class="card">
+      <a class="ext" href="https://youtube.com/playlist?list=PLnH9HulIMcJeJDKi0oPVAk0lEQ-kGxFiJ"
+         target="_blank" style="margin-bottom:10px;display:inline-flex">↗ 전체 플레이리스트 보기</a>
+      <div class="yt-box">
+        <iframe src="https://www.youtube.com/embed/videoseries?list=PLnH9HulIMcJeJDKi0oPVAk0lEQ-kGxFiJ"
+                allowfullscreen title="남현교회 중등부 설교/찬양"></iframe>
+      </div>
+    </div>
+    <div class="divv"></div>
+    <div class="sh">설교/찬양 목록</div>
+    <div class="card" id="media-list"><div class="loading"><div class="spin"></div></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+   PAGE: BULLETIN
+═══════════════════════════════════════ -->
+<div class="page" id="page-bulletin">
+  <div class="wrap">
+    <div class="sh">주보 & 공지사항</div>
+    <div class="card" id="bulletin-list"><div class="loading"><div class="spin"></div></div></div>
+  </div>
+</div>
+
+<footer>
+  남현교회 중등부 · 서울 구로구 경인로 346 · ☎ 010-2088-4620<br>
+  <a class="ext" href="http://www.inamhyun.org/" target="_blank" style="margin-top:4px;display:inline-block">남현교회 메인 홈페이지 ↗</a>
+</footer>
+
+<!-- ═══════════════════════════════════════
+   CONFIG — Supabase 연결 정보 입력
+═══════════════════════════════════════ -->
+<script>
+const CFG = {
+  SUPABASE_URL: 'YOUR_SUPABASE_PROJECT_URL',   // 예: https://xxxx.supabase.co
+  SUPABASE_KEY: 'YOUR_SUPABASE_ANON_KEY',      // Supabase 대시보드 → Settings → API
+  GCAL_URL:     'YOUR_GOOGLE_CALENDAR_EMBED_URL', // 구글 캘린더 임베드 URL
+};
+</script>
+
+<!-- Supabase JS SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+
+<!-- ═══════════════════════════════════════
+   APP LOGIC
+═══════════════════════════════════════ -->
+<script>
+// ── Supabase 클라이언트 ─────────────────────────────────────
+let db = null;
+function initDB() {
+  if (CFG.SUPABASE_URL !== 'YOUR_SUPABASE_PROJECT_URL') {
+    db = window.supabase.createClient(CFG.SUPABASE_URL, CFG.SUPABASE_KEY);
+  }
+}
+
+// ── 샘플 데이터 (Supabase 미연결 시 사용) ───────────────────
+const SAMPLE = {
+  posts: [
+    {id:'1',type:'bulletin',title:'2026년 6월 2주 주보 (6.14)',date:'2026-06-14',
+     content:'성경봉독: 고린도전서 2장 10-16절\n설교: 성령님을 의지하며 배움\n결단: 주님을 예배하는 것 다시 일어나'},
+    {id:'2',type:'notice',title:'여름수련회 안내 (7/29~31)',date:'2026-06-10',
+     content:'장소: 가평 오름비전빌리지\nQR 코드로 신청해주시기 바랍니다.'},
+    {id:'3',type:'notice',title:'고척중 성경탐구 동아리 안내',date:'2026-06-05',
+     content:'일시: 6월 19일(금) 오전 8:10~8:30\n장소: 1층 멀티미디어실\n대상: 고척중학교 1-3학년'},
+    {id:'4',type:'sermon',title:'성령님을 의지하며 배움',date:'2026-06-14',
+     content:'https://youtube.com/playlist?list=PLnH9HulIMcJeJDKi0oPVAk0lEQ-kGxFiJ'},
+    {id:'5',type:'praise',title:'주일 찬양 (2026.6.14)',date:'2026-06-14',content:''},
+  ],
+  schedules: [
+    {id:'1',date:'2026-06-14',title:'반별 대심방 3학년 4반',tag:'예배'},
+    {id:'2',date:'2026-06-21',title:'중등부 친구초청잔치',tag:'행사'},
+    {id:'3',date:'2026-06-28',title:'반별 대심방 3학년 5반',tag:'예배'},
+    {id:'4',date:'2026-07-19',title:'여름수련회 사전 모임',tag:'수련회'},
+    {id:'5',date:'2026-07-29',title:'여름수련회 1일차 (가평)',tag:'수련회'},
+    {id:'6',date:'2026-07-30',title:'여름수련회 2일차',tag:'수련회'},
+    {id:'7',date:'2026-07-31',title:'여름수련회 3일차',tag:'수련회'},
+    {id:'8',date:'2026-09-20',title:'중등부 체육대회',tag:'행사'},
+    {id:'9',date:'2026-12-25',title:'성탄절 예배',tag:'특별'},
+  ]
+};
+
+// ── 데이터 fetch ────────────────────────────────────────────
+async function fetchPosts(type) {
+  if (!db) return type
+    ? SAMPLE.posts.filter(p => p.type === type)
+    : SAMPLE.posts;
+  let q = db.from('posts').select('*').order('date', {ascending:false});
+  if (type) q = q.eq('type', type);
+  const {data, error} = await q;
+  return error ? [] : data;
+}
+
+async function fetchSchedules() {
+  if (!db) return SAMPLE.schedules;
+  const {data, error} = await db.from('schedules').select('*').order('date');
+  return error ? [] : data;
+}
+
+// ── 뱃지 헬퍼 ───────────────────────────────────────────────
+const TYPE_LABEL = {sermon:'설교',praise:'찬양',bulletin:'주보',notice:'공지'};
+const TYPE_BADGE = {sermon:'b-s',praise:'b-p',bulletin:'b-b',notice:'b-n'};
+
+function niHTML(p) {
+  const yt = p.content && p.content.includes('youtube');
+  return `<div class="ni">
+    <span class="badge ${TYPE_BADGE[p.type]||'b-n'}">${TYPE_LABEL[p.type]||p.type}</span>
+    <div>
+      <div class="ni-title">${p.title}</div>
+      ${p.content && !yt ? `<div class="ni-body">${p.content}</div>` : ''}
+      ${yt ? `<a class="ext" href="${p.content}" target="_blank" style="margin-top:4px;display:inline-flex;font-size:12px">↗ 유튜브 보기</a>` : ''}
+      <div class="ni-date">${p.date}</div>
+    </div>
+  </div>`;
+}
+
+// ── PAGE: HOME ───────────────────────────────────────────────
+async function renderHome() {
+  const now = new Date(); const dow = now.getDay();
+  const diff = dow === 0 ? 7 : 7 - dow;
+  const ns = new Date(now); ns.setDate(now.getDate() + diff);
+  document.getElementById('s-nextSun').textContent = (ns.getMonth()+1) + '/' + ns.getDate();
+
+  const [posts, scheds] = await Promise.all([fetchPosts(), fetchSchedules()]);
+  const ym = now.toISOString().slice(0,7);
+  document.getElementById('s-evCnt').textContent = scheds.filter(s=>s.date.startsWith(ym)).length + '건';
+  document.getElementById('s-noCnt').textContent = posts.length + '개';
+
+  const el = document.getElementById('home-notices');
+  const rec = posts.slice(0,5);
+  el.innerHTML = rec.length ? rec.map(niHTML).join('') : '<div class="empty">등록된 공지가 없습니다.</div>';
+}
+
+// ── PAGE: SCHEDULE (달력) ────────────────────────────────────
+let calY = new Date().getFullYear(), calM = new Date().getMonth();
+
+async function renderCal() {
+  const scheds = await fetchSchedules();
+  const months = '1월,2월,3월,4월,5월,6월,7월,8월,9월,10월,11월,12월'.split(',');
+  document.getElementById('cal-label').textContent = calY + '년 ' + months[calM];
+
+  const g = document.getElementById('cal-grid');
+  const dh = ['일','월','화','수','목','금','토'];
+  let h = dh.map((d,i)=>`<div class="cal-dh ${i===0?'sun':i===6?'sat':''}">${d}</div>`).join('');
+  const first = new Date(calY,calM,1).getDay();
+  const last  = new Date(calY,calM+1,0).getDate();
+  const today = new Date();
+  for(let i=0;i<first;i++) h+=`<div class="cal-cell empty"></div>`;
+  for(let d=1;d<=last;d++){
+    const dow2 = new Date(calY,calM,d).getDay();
+    const isSun=dow2===0, isSat=dow2===6;
+    const isToday = today.getFullYear()===calY && today.getMonth()===calM && today.getDate()===d;
+    const ds = calY+'-'+String(calM+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+    const evs = scheds.filter(s=>s.date===ds);
+    const cls = 'cal-cell'+(isSun?' sunday':isSat?' saturday':'')+(isToday?' today':'');
+    const evH = evs.map(e=>`<div class="cal-ev ${isSun?'ev-red':''}">${e.title}</div>`).join('');
+    h+=`<div class="${cls}"><div class="day-n">${d}</div>${evH}</div>`;
+  }
+  g.innerHTML = h;
+
+  const ym2 = calY+'-'+String(calM+1).padStart(2,'0');
+  const ml = document.getElementById('month-list');
+  const mev = scheds.filter(s=>s.date.startsWith(ym2));
+  ml.innerHTML = mev.length ? mev.map(s=>`<div class="ni">
+    <span class="badge b-s">${s.tag}</span>
+    <div><div class="ni-title">${s.title}</div><div class="ni-date">${s.date}</div></div>
+  </div>`).join('') : '<div class="empty">이번 달 등록된 행사가 없습니다.</div>';
+}
+
+function movMonth(d){
+  calM+=d;
+  if(calM>11){calM=0;calY++;}
+  if(calM<0){calM=11;calY--;}
+  renderCal();
+}
+
+function switchTab(t,btn){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById('tab-mine').style.display=t==='mine'?'block':'none';
+  document.getElementById('tab-gcal').style.display=t==='gcal'?'block':'none';
+  if(t==='gcal' && CFG.GCAL_URL!=='YOUR_GOOGLE_CALENDAR_EMBED_URL'){
+    document.getElementById('gcal-frame').src=CFG.GCAL_URL;
+  }
+}
+
+// ── PAGE: MEDIA ──────────────────────────────────────────────
+async function renderMedia(){
+  const posts = await fetchPosts();
+  const el = document.getElementById('media-list');
+  const items = posts.filter(p=>p.type==='sermon'||p.type==='praise');
+  el.innerHTML = items.length ? items.map(niHTML).join('') : '<div class="empty">등록된 설교/찬양이 없습니다.</div>';
+}
+
+// ── PAGE: BULLETIN ───────────────────────────────────────────
+async function renderBulletin(){
+  const posts = await fetchPosts();
+  const el = document.getElementById('bulletin-list');
+  const items = posts.filter(p=>p.type==='bulletin'||p.type==='notice');
+  el.innerHTML = items.length ? items.map(niHTML).join('') : '<div class="empty">등록된 주보/공지가 없습니다.</div>';
+}
+
+// ── NAVIGATION ───────────────────────────────────────────────
+const renders = {
+  home:     renderHome,
+  schedule: ()=>{ calY=new Date().getFullYear(); calM=new Date().getMonth(); renderCal(); },
+  media:    renderMedia,
+  bulletin: renderBulletin,
+};
+
+function go(id, btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.nav-link').forEach(b=>b.classList.remove('on'));
+  const pg = document.getElementById('page-'+id);
+  if(pg) pg.classList.add('on');
+  if(btn) btn.classList.add('on');
+  else { const nl=document.getElementById('nl-'+id); if(nl) nl.classList.add('on'); }
+  window.scrollTo(0,0);
+  if(renders[id]) renders[id]();
+}
+
+function toggleMobile(){
+  const m=document.getElementById('mobile-nav');
+  m.style.display=m.style.display==='block'?'none':'block';
+}
+function closeMobile(){document.getElementById('mobile-nav').style.display='none';}
+
+// ── INIT ─────────────────────────────────────────────────────
+initDB();
+renderHome();
+</script>
+</body>
+</html>
