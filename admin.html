@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>관리자 · 남현교회 중등부</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue:#185FA5;--blue-l:#E6F1FB;--blue-d:#0C447C;--blue-xl:#042C53;
+  --green:#1D9E75;--red:#A32D2D;--red-l:#FCEBEB;
+  --bg:#F4F3F0;--card:#fff;--surface:#ECEAE6;
+  --t1:#1a1a1a;--t2:#555;--t3:#888;
+  --br:#e4e4e2;--r:10px;--r-sm:6px;
+  --shadow:0 1px 3px rgba(0,0,0,.07);
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans-serif;
+  background:var(--bg);color:var(--t1);font-size:15px;line-height:1.65}
+
+/* ── LOGIN ── */
+.login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1rem}
+.login-box{background:#fff;border:1px solid var(--br);border-radius:var(--r);
+  padding:2rem;width:100%;max-width:360px;box-shadow:var(--shadow)}
+.login-logo{width:48px;height:48px;background:var(--blue);border-radius:10px;
+  display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;font-weight:700;
+  margin:0 auto 1rem}
+.login-title{text-align:center;font-size:18px;font-weight:700;margin-bottom:4px}
+.login-sub{text-align:center;font-size:13px;color:var(--t3);margin-bottom:1.5rem}
+.err-box{background:var(--red-l);color:var(--red);font-size:13px;padding:8px 12px;
+  border-radius:var(--r-sm);margin-bottom:1rem;display:none}
+
+/* ── FORMS ── */
+.fl{font-size:13px;font-weight:500;color:var(--t2);margin-bottom:5px;display:block}
+.fg{margin-bottom:1rem}
+input[type=password],input[type=text],input[type=date],textarea,select{
+  width:100%;padding:9px 12px;border:1px solid var(--br);border-radius:var(--r-sm);
+  font-size:14px;font-family:inherit;background:#fff;color:var(--t1);transition:border-color .15s}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue)}
+textarea{min-height:80px;resize:vertical}
+
+/* ── BUTTONS ── */
+.btn{padding:9px 18px;border-radius:var(--r-sm);font-size:13px;font-weight:600;
+  cursor:pointer;border:none;font-family:inherit;transition:opacity .15s}
+.btn:hover{opacity:.88}
+.btn-primary{background:var(--blue);color:#fff;width:100%}
+.btn-blue{background:var(--blue);color:#fff}
+.btn-ghost{background:#fff;border:1px solid var(--br);color:var(--t2)}
+.btn-del{background:none;border:1px solid var(--br);color:var(--t3);
+  padding:4px 10px;border-radius:4px;cursor:pointer;font-size:12px;font-family:inherit}
+.btn-del:hover{border-color:var(--red);color:var(--red)}
+
+/* ── NAV ── */
+.nav{background:#fff;border-bottom:1px solid var(--br);height:54px;display:flex;
+  align-items:center;justify-content:space-between;padding:0 1.25rem;
+  position:sticky;top:0;z-index:200;box-shadow:var(--shadow)}
+.nav-brand{display:flex;align-items:center;gap:9px}
+.nav-logo{width:32px;height:32px;background:var(--blue);border-radius:7px;
+  display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700}
+.nav-name{font-size:14px;font-weight:700;color:var(--t1)}
+.nav-tag{font-size:11px;background:var(--blue-l);color:var(--blue-d);
+  padding:2px 8px;border-radius:4px;font-weight:600;margin-left:4px}
+.nav-right{display:flex;align-items:center;gap:8px}
+.logout-btn{background:none;border:1px solid var(--br);padding:5px 12px;
+  border-radius:var(--r-sm);font-size:12px;cursor:pointer;color:var(--t2);font-family:inherit}
+
+/* ── LAYOUT ── */
+.wrap{max-width:760px;margin:0 auto;padding:1.5rem 1rem}
+.sh{font-size:14px;font-weight:700;color:var(--t1);margin:1.5rem 0 .75rem;
+  display:flex;align-items:center;gap:6px}
+.sh:first-of-type{margin-top:0}
+.sh::before{content:'';width:3px;height:14px;background:var(--blue);border-radius:2px}
+.card{background:#fff;border:1px solid var(--br);border-radius:var(--r);
+  padding:1rem 1.25rem;margin-bottom:1rem;box-shadow:var(--shadow)}
+
+/* ── TAG SELECT ── */
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:5px}
+.tag{padding:5px 13px;border-radius:6px;font-size:12px;font-weight:500;
+  border:1px solid var(--br);cursor:pointer;background:#fff;color:var(--t2)}
+.tag.on{background:var(--blue-l);color:var(--blue-d);border-color:var(--blue)}
+
+/* ── LIST ── */
+.li{display:flex;align-items:flex-start;gap:10px;padding:.65rem 0;
+  border-bottom:1px solid var(--br)}
+.li:last-child{border-bottom:none}
+.badge{font-size:11px;padding:2px 8px;border-radius:4px;font-weight:600;white-space:nowrap;flex-shrink:0}
+.b-s{background:#E6F1FB;color:#0C447C}.b-p{background:#E1F5EE;color:#085041}
+.b-b{background:#FAEEDA;color:#633806}.b-n{background:#FBEAF0;color:#72243E}
+.b-ev{background:#E6F1FB;color:#0C447C}
+.li-title{font-size:13px;font-weight:500;color:var(--t1)}
+.li-date{font-size:11px;color:var(--t3);margin-top:1px}
+
+/* ── SETUP BOX ── */
+.setup-box{background:var(--blue-l);border:1px solid #B5D4F4;border-radius:var(--r);
+  padding:1rem 1.25rem;margin-bottom:1.25rem}
+.setup-box h3{font-size:14px;font-weight:700;color:var(--blue-d);margin-bottom:6px}
+.setup-box p{font-size:12px;color:var(--blue);line-height:1.7}
+.setup-box code{background:#fff;padding:2px 6px;border-radius:3px;font-size:11px;
+  border:1px solid #B5D4F4;display:inline-block;margin:3px 0;word-break:break-all}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:20px;right:20px;padding:10px 18px;border-radius:8px;
+  font-size:13px;font-weight:500;z-index:999;display:none;
+  box-shadow:0 4px 16px rgba(0,0,0,.18);color:#fff}
+.toast.ok{background:var(--green)}.toast.err{background:var(--red)}
+
+.empty{text-align:center;padding:1.5rem;color:var(--t3);font-size:13px}
+#admin-app{display:none}
+</style>
+</head>
+<body>
+
+<!-- ═══ LOGIN ═══════════════════════════════════════════════ -->
+<div class="login-page" id="login-page">
+  <div class="login-box">
+    <div class="login-logo">중등부</div>
+    <div class="login-title">관리자 로그인</div>
+    <div class="login-sub">남현교회 중등부 관리자 페이지</div>
+    <div class="err-box" id="err-box">비밀번호가 올바르지 않습니다.</div>
+    <div class="fg">
+      <label class="fl">비밀번호</label>
+      <input type="password" id="pw-input" placeholder="비밀번호 입력"
+             onkeydown="if(event.key==='Enter')login()">
+    </div>
+    <button class="btn btn-primary" onclick="login()">로그인</button>
+    <p style="text-align:center;margin-top:1rem">
+      <a href="index.html" style="font-size:12px;color:var(--t3);text-decoration:none">← 홈으로</a>
+    </p>
+  </div>
+</div>
+
+<!-- ═══ ADMIN APP ════════════════════════════════════════════ -->
+<div id="admin-app">
+  <nav class="nav">
+    <div class="nav-brand">
+      <div class="nav-logo">중등부</div>
+      <span class="nav-name">남현교회 중등부</span>
+      <span class="nav-tag">관리자</span>
+    </div>
+    <div class="nav-right">
+      <a href="index.html" style="font-size:13px;color:var(--blue);text-decoration:none">← 홈 보기</a>
+      <button class="logout-btn" onclick="logout()">로그아웃</button>
+    </div>
+  </nav>
+
+  <div class="wrap">
+
+    <!-- Supabase 미설정 안내 -->
+    <div class="setup-box" id="setup-box">
+      <h3>⚙️ Supabase 미연결 — 로컬 저장 모드</h3>
+      <p>
+        현재 브라우저 로컬에 데이터가 저장됩니다.<br>
+        Supabase를 연결하면 모든 기기에서 동일한 데이터를 사용할 수 있어요.<br><br>
+        <strong>index.html</strong> 하단 CFG 값을 채우면 자동 연결됩니다:<br>
+        <code>SUPABASE_URL</code> · <code>SUPABASE_KEY</code>
+      </p>
+    </div>
+
+    <!-- 비밀번호 변경 -->
+    <div class="sh">비밀번호 변경</div>
+    <div class="card">
+      <div class="fg"><label class="fl">현재 비밀번호</label><input type="password" id="pw-cur"></div>
+      <div class="fg"><label class="fl">새 비밀번호 (6자 이상)</label><input type="password" id="pw-new"></div>
+      <div class="fg"><label class="fl">새 비밀번호 확인</label><input type="password" id="pw-cf"></div>
+      <button class="btn btn-blue" onclick="changePw()">변경하기</button>
+    </div>
+
+    <!-- 구글 캘린더 URL 설정 -->
+    <div class="sh">구글 캘린더 설정</div>
+    <div class="card">
+      <div class="fg">
+        <label class="fl">구글 캘린더 임베드 URL</label>
+        <input type="text" id="gcal-url" placeholder="https://calendar.google.com/calendar/embed?src=...">
+        <p style="font-size:11px;color:var(--t3);margin-top:4px">구글 캘린더 → 설정 → 내 캘린더 → 공개 설정 → 임베드 코드에서 src= 값 복사</p>
+      </div>
+      <button class="btn btn-blue" onclick="saveGcal()">저장</button>
+    </div>
+
+    <!-- 공지/주보/설교 등록 -->
+    <div class="sh">공지 / 주보 / 설교 등록</div>
+    <div class="card">
+      <div class="fg">
+        <label class="fl">분류</label>
+        <div class="tags" id="type-tags">
+          <div class="tag on" data-v="bulletin" onclick="selTag(this,'type-tags')">주보</div>
+          <div class="tag"    data-v="sermon"   onclick="selTag(this,'type-tags')">설교</div>
+          <div class="tag"    data-v="praise"   onclick="selTag(this,'type-tags')">찬양</div>
+          <div class="tag"    data-v="notice"   onclick="selTag(this,'type-tags')">공지</div>
+        </div>
+      </div>
+      <div class="fg"><label class="fl">제목</label><input type="text" id="p-title" placeholder="예: 6월 2주 주보"></div>
+      <div class="fg"><label class="fl">날짜</label><input type="date" id="p-date"></div>
+      <div class="fg">
+        <label class="fl">내용 / 유튜브 URL</label>
+        <textarea id="p-content" placeholder="예배 순서, 공지 내용, 또는 유튜브 링크를 입력하세요"></textarea>
+      </div>
+      <button class="btn btn-blue" onclick="addPost()">등록하기</button>
+    </div>
+
+    <!-- 등록된 게시물 -->
+    <div class="sh" style="justify-content:space-between">
+      <span style="display:flex;align-items:center;gap:6px"><span style="width:3px;height:14px;background:var(--blue);border-radius:2px;display:inline-block"></span>등록된 게시물</span>
+      <button class="btn btn-ghost" style="font-size:12px;padding:4px 10px" onclick="loadLists()">새로고침</button>
+    </div>
+    <div class="card" id="post-list"><div class="empty">불러오는 중...</div></div>
+
+    <!-- 연간 일정 등록 -->
+    <div class="sh">연간 일정 등록</div>
+    <div class="card">
+      <div class="fg"><label class="fl">날짜</label><input type="date" id="s-date"></div>
+      <div class="fg"><label class="fl">행사명</label><input type="text" id="s-title" placeholder="예: 여름수련회"></div>
+      <div class="fg">
+        <label class="fl">태그</label>
+        <div class="tags" id="stag-tags">
+          <div class="tag on" data-v="예배"    onclick="selTag(this,'stag-tags')">예배</div>
+          <div class="tag"    data-v="수련회"  onclick="selTag(this,'stag-tags')">수련회</div>
+          <div class="tag"    data-v="행사"    onclick="selTag(this,'stag-tags')">행사</div>
+          <div class="tag"    data-v="시험기간" onclick="selTag(this,'stag-tags')">시험기간</div>
+          <div class="tag"    data-v="특별"    onclick="selTag(this,'stag-tags')">특별</div>
+        </div>
+      </div>
+      <button class="btn btn-blue" onclick="addSched()">일정 추가</button>
+    </div>
+
+    <!-- 등록된 일정 -->
+    <div class="sh">등록된 일정</div>
+    <div class="card" id="sched-list"><div class="empty">불러오는 중...</div></div>
+
+    <div style="height:3rem"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- CONFIG (index.html과 동일하게 유지) -->
+<script>
+const CFG = {
+  SUPABASE_URL: 'YOUR_SUPABASE_PROJECT_URL',
+  SUPABASE_KEY: 'YOUR_SUPABASE_ANON_KEY',
+  PW_KEY: 'nm_pw',
+  DEFAULT_PW: 'namhyun2026',
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+// ── DB ───────────────────────────────────────────────────────
+let db = null;
+const connected = () => CFG.SUPABASE_URL !== 'YOUR_SUPABASE_PROJECT_URL';
+
+function initDB() {
+  if (connected()) db = window.supabase.createClient(CFG.SUPABASE_URL, CFG.SUPABASE_KEY);
+}
+
+// ── LOCAL STORAGE FALLBACK ───────────────────────────────────
+let local = {
+  posts:     JSON.parse(localStorage.getItem('nm_posts')  || '[]'),
+  schedules: JSON.parse(localStorage.getItem('nm_scheds') || '[]'),
+};
+function saveLocal() {
+  localStorage.setItem('nm_posts',  JSON.stringify(local.posts));
+  localStorage.setItem('nm_scheds', JSON.stringify(local.schedules));
+}
+
+// ── AUTH ─────────────────────────────────────────────────────
+function getPw()  { return localStorage.getItem(CFG.PW_KEY) || CFG.DEFAULT_PW; }
+
+function login() {
+  const v = document.getElementById('pw-input').value;
+  if (v === getPw()) {
+    sessionStorage.setItem('nm_auth','1');
+    document.getElementById('login-page').style.display = 'none';
+    document.getElementById('admin-app').style.display  = 'block';
+    if (connected()) document.getElementById('setup-box').style.display = 'none';
+    initAdmin();
+  } else {
+    document.getElementById('err-box').style.display = 'block';
+    document.getElementById('pw-input').value = '';
+  }
+}
+function logout() { sessionStorage.removeItem('nm_auth'); location.reload(); }
+
+function changePw() {
+  const cur = document.getElementById('pw-cur').value;
+  const nw  = document.getElementById('pw-new').value;
+  const cf  = document.getElementById('pw-cf').value;
+  if (cur !== getPw())  { toast('현재 비밀번호가 틀렸습니다.', true); return; }
+  if (nw.length < 6)    { toast('새 비밀번호는 6자 이상이어야 합니다.', true); return; }
+  if (nw !== cf)        { toast('새 비밀번호가 일치하지 않습니다.', true); return; }
+  localStorage.setItem(CFG.PW_KEY, nw);
+  toast('비밀번호가 변경되었습니다.');
+  ['pw-cur','pw-new','pw-cf'].forEach(id => document.getElementById(id).value = '');
+}
+
+// ── GCAL ─────────────────────────────────────────────────────
+function saveGcal() {
+  const url = document.getElementById('gcal-url').value.trim();
+  localStorage.setItem('nm_gcal', url);
+  toast('구글 캘린더 URL이 저장되었습니다.');
+}
+
+// ── HELPERS ─────────────────────────────────────────────────
+function selTag(el, g) {
+  document.querySelectorAll('#'+g+' .tag').forEach(t=>t.classList.remove('on'));
+  el.classList.add('on');
+}
+function getTag(g) {
+  const s = document.querySelector('#'+g+' .tag.on');
+  return s ? s.dataset.v : '';
+}
+function toast(msg, isErr) {
+  const t = document.getElementById('toast');
+  t.textContent = (isErr ? '✕ ' : '✓ ') + msg;
+  t.className = 'toast ' + (isErr ? 'err' : 'ok');
+  t.style.display = 'block';
+  setTimeout(() => t.style.display = 'none', 2500);
+}
+
+// ── CRUD: POSTS ──────────────────────────────────────────────
+async function addPost() {
+  const title   = document.getElementById('p-title').value.trim();
+  const date    = document.getElementById('p-date').value;
+  const content = document.getElementById('p-content').value.trim();
+  const type    = getTag('type-tags');
+  if (!title || !date) { toast('제목과 날짜를 입력해주세요.', true); return; }
+
+  if (db) {
+    const {error} = await db.from('posts').insert({type, title, date, content});
+    if (error) { toast('저장 실패: ' + error.message, true); return; }
+  } else {
+    local.posts.unshift({id: Date.now().toString(), type, title, date, content});
+    saveLocal();
+  }
+  toast('등록되었습니다.');
+  document.getElementById('p-title').value = '';
+  document.getElementById('p-content').value = '';
+  loadLists();
+}
+
+async function delPost(id) {
+  if (!confirm('삭제하시겠습니까?')) return;
+  if (db) {
+    const {error} = await db.from('posts').delete().eq('id', id);
+    if (error) { toast('삭제 실패', true); return; }
+  } else {
+    local.posts = local.posts.filter(p => p.id !== id);
+    saveLocal();
+  }
+  toast('삭제되었습니다.');
+  loadLists();
+}
+
+// ── CRUD: SCHEDULES ──────────────────────────────────────────
+async function addSched() {
+  const date  = document.getElementById('s-date').value;
+  const title = document.getElementById('s-title').value.trim();
+  const tag   = getTag('stag-tags');
+  if (!date || !title) { toast('날짜와 행사명을 입력해주세요.', true); return; }
+
+  if (db) {
+    const {error} = await db.from('schedules').insert({date, title, tag});
+    if (error) { toast('저장 실패: ' + error.message, true); return; }
+  } else {
+    local.schedules.push({id: Date.now().toString(), date, title, tag});
+    local.schedules.sort((a,b) => a.date.localeCompare(b.date));
+    saveLocal();
+  }
+  toast('일정이 추가되었습니다.');
+  document.getElementById('s-title').value = '';
+  loadLists();
+}
+
+async function delSched(id) {
+  if (!confirm('삭제하시겠습니까?')) return;
+  if (db) {
+    const {error} = await db.from('schedules').delete().eq('id', id);
+    if (error) { toast('삭제 실패', true); return; }
+  } else {
+    local.schedules = local.schedules.filter(s => s.id !== id);
+    saveLocal();
+  }
+  toast('삭제되었습니다.');
+  loadLists();
+}
+
+// ── RENDER LISTS ─────────────────────────────────────────────
+const LABEL = {sermon:'설교',praise:'찬양',bulletin:'주보',notice:'공지'};
+const BADGE  = {sermon:'b-s',praise:'b-p',bulletin:'b-b',notice:'b-n'};
+
+async function loadLists() {
+  // Posts
+  let posts;
+  if (db) {
+    const {data} = await db.from('posts').select('*').order('date', {ascending:false});
+    posts = data || [];
+  } else { posts = local.posts; }
+
+  const pl = document.getElementById('post-list');
+  pl.innerHTML = posts.length ? posts.map(p => `
+    <div class="li">
+      <span class="badge ${BADGE[p.type]||'b-n'}">${LABEL[p.type]||p.type}</span>
+      <div style="flex:1">
+        <div class="li-title">${p.title}</div>
+        <div class="li-date">${p.date}</div>
+      </div>
+      <button class="btn-del" onclick="delPost('${p.id}')">삭제</button>
+    </div>`).join('') : '<div class="empty">등록된 게시물이 없습니다.</div>';
+
+  // Schedules
+  let scheds;
+  if (db) {
+    const {data} = await db.from('schedules').select('*').order('date');
+    scheds = data || [];
+  } else { scheds = local.schedules; }
+
+  const sl = document.getElementById('sched-list');
+  sl.innerHTML = scheds.length ? scheds.map(s => `
+    <div class="li">
+      <span class="badge b-ev">${s.tag}</span>
+      <div style="flex:1">
+        <div class="li-title">${s.title}</div>
+        <div class="li-date">${s.date}</div>
+      </div>
+      <button class="btn-del" onclick="delSched('${s.id}')">삭제</button>
+    </div>`).join('') : '<div class="empty">등록된 일정이 없습니다.</div>';
+}
+
+// ── INIT ─────────────────────────────────────────────────────
+function initAdmin() {
+  document.getElementById('p-date').value = new Date().toISOString().slice(0,10);
+  document.getElementById('s-date').value = new Date().toISOString().slice(0,10);
+  const gcal = localStorage.getItem('nm_gcal');
+  if (gcal) document.getElementById('gcal-url').value = gcal;
+  initDB();
+  loadLists();
+}
+
+if (sessionStorage.getItem('nm_auth') === '1') {
+  document.getElementById('login-page').style.display = 'none';
+  document.getElementById('admin-app').style.display  = 'block';
+  if (connected()) document.getElementById('setup-box').style.display = 'none';
+  initAdmin();
+}
+</script>
+</body>
+</html>
